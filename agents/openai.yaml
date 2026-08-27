@@ -1,6 +1,7 @@
-name: skill-tqx-research
+﻿name: skill-tqx-research
 entrypoint: SKILL.md
 interface:
   display_name: "TQX Research"
-  short_description: "Set up Qube research workflows and backtests"
-  default_prompt: "Use $skill-tqx-research to set up the CLI and help me with an explicit Qube research, factor, strategy, or backtest task."
+  short_description: "Local tqx_data factor analysis and strategy backtest code generation"
+  default_prompt: "Use $skill-tqx-research for local tqx_data factor analysis, factor code generation, strategy backtest code generation, and local research validation."
+

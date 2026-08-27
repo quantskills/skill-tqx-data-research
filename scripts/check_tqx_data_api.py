@@ -1,16 +1,25 @@
-"""Compare runtime tqx_data exports with documented names."""
+"""Check local tqx_data setup and runtime exports."""
 from __future__ import annotations
 
 import argparse
 import inspect
+import os
 import re
 from pathlib import Path
+from dotenv import load_dotenv
+
+ROOT = Path(__file__).resolve().parents[1]
+load_dotenv(ROOT / ".env", override=False)
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--doc", type=Path, required=True)
     args = parser.parse_args()
+    parquet_root = os.environ.get("PARQUET_ROOT_PATH", "").strip()
+    print(f"PARQUET_ROOT_PATH={parquet_root or '<unset>'}")
+    if parquet_root:
+        print(f"PARQUET_ROOT_EXISTS={Path(parquet_root).exists()}")
     try:
         import tqx_data  # type: ignore
     except Exception as exc:
