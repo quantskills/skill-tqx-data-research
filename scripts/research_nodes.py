@@ -402,7 +402,7 @@ def run_code_backtest(
         ctx.recompute_equity()
         equity_curve.append(float(ctx.equity))
 
-        # 记录穿透式自检：任何单日回撤都不应靠未来价
+        # 璁板綍绌块€忓紡鑷锛氫换浣曞崟鏃ュ洖鎾ら兘涓嶅簲闈犳湭鏉ヤ环
         if not equity_curve:
             continue
         _ = before_pos  # keep local for debugging consistency

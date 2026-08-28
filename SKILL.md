@@ -1,34 +1,33 @@
 ---
 name: skill-tqx-research
-description: Use tqx_data with local parquet to generate and run Hong Kong and US factor analysis, time-series strategy backtests, and cross-sectional strategy backtests. Use when the prompt asks for factor construction, IC/IR/group/decay analysis, or strategy code generation and validation.
+description: 使用 tqx_data 和本地 parquet 做港股和美股因子分析与策略回测。用于因子构建、IC/IR/分组/衰减分析，以及策略代码生成或验证。
 ---
 
-Use Python 3.12.
+## 安装
 
-## Setup
+- 使用 Python 3.12。
+- 执行 `python -m pip install -r requirements.txt`。
+- 如果有 `tqx_data` 的 whl，先安装它。
+- 复制 `.env.example` 为 `.env`，并设置 `PARQUET_ROOT_PATH`。
 
-- Create or activate a Python 3.12 environment.
-- Install dependencies with `python -m pip install -r requirements.txt`.
-- If your environment provides a `tqx_data` wheel, install it before running the skill.
-- Copy `.env.example` to `.env` and set `PARQUET_ROOT_PATH`.
+## 参考文件
 
-Read only these references when needed:
+按需读取：
 
 - `references/research_rules.md`
 - `references/output_contract.md`
 - `references/factor_codegen_assistant.md`
 - `references/strategy_codegen_assistant.md`
 
-Route by request:
+## 入口分类
 
-- Factor analysis: market + factor definition + optional period/group/rebalance/direction
-- Time-series strategy: market + instrument + entry/exit rule + optional settings
-- Cross-sectional strategy: market + universe + filter/rank rule + optional settings
+- 因子分析：市场 + 因子定义 + 可选周期/分组/调仓/方向
+- 时序回测：市场 + 标的 + 开平仓规则 + 可选参数
+- 截面回测：市场 + 股票池 + 过滤/排序规则 + 可选参数
 
-Hard rules:
+## 硬规则
 
-- Use `tqx_data` plus local parquet only.
-- Do not mix factor analysis with strategy backtests.
-- Do not use future data.
-- Do not hardcode one strategy type.
-- If code or data fails, classify environment, data, then logic.
+- 只用 `tqx_data` + 本地 parquet。
+- 不要把因子分析和策略回测混在一起。
+- 不要使用未来数据。
+- 如果代码或数据失败，先判断环境，再判断数据，最后判断逻辑。

@@ -2,7 +2,7 @@
 
 ## Default routing
 
-- `??5?????????????????5?` -> factor analysis
+- 因子、IC、IR、分组、衰减分析 -> factor analysis
 - MA / RSI / breakout / momentum / entry-exit -> time-series strategy
 - top N / screening / ranking / universe selection -> cross-sectional strategy
 

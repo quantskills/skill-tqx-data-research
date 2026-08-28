@@ -1,6 +1,2 @@
 name: skill-tqx-research
 entrypoint: SKILL.md
-interface:
-  display_name: "TQX Research"
-  short_description: "Local tqx_data factor analysis and strategy backtest code generation"
-  default_prompt: "Use $skill-tqx-research for local tqx_data factor analysis, time-series strategy backtests, cross-sectional strategy backtests, factor code generation, and local research validation."
