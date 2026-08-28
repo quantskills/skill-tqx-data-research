@@ -7,7 +7,6 @@ def initialize(context):
     # The backtest node you used is an HK stock backtest node (market=hk),
     # so we must trade HK symbols, not US (.NB) symbols.
     # Here we switch to Tencent as an example.
-    context.account = "15032863"
     context.symbol = "0700.HK"  # HK stock symbol instead of AAPL.NB
 
     # Parameters

@@ -1,27 +1,39 @@
-# Output contract
+# 输出契约
 
-## Factor analysis
+## 因子分析
 
-Return:
+至少输出：
 
-- `IC`
-- `Rank IC`
-- `ICIR`
-- grouped return summary
-- decay
-- confidence
+- 市场
+- 股票或股票池
+- 因子定义
+- 前向收益定义
+- 样本区间
+- IC
+- Rank IC
+- ICIR
+- 分组收益
+- 衰减
+- 结论
 
-If data is missing, return the exact missing market, universe, column, date range, or parquet path.
+## 策略回测
 
-## Strategy backtest
+至少输出：
 
-Return:
-
-- total return
-- annual return
-- max drawdown
+- 市场
+- 股票或股票池
+- 策略规则
+- 交易频率
+- 回测区间
+- 初始资金
+- 总收益
+- 年化收益
+- 最大回撤
 - Sharpe
-- trade count
-- final equity
+- 交易次数
+- 最终净值
+- 结论
 
-If a run fails, return the exact missing environment, data, or logic item. Do not invent metrics.
+## 失败时
+
+如果数据不足或规则不完整，必须先说明缺什么，再继续补齐，不允许编造数值。

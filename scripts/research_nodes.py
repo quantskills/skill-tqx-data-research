@@ -415,6 +415,7 @@ def run_code_backtest(
         "initial_cash": float(initial_cash),
         "final_equity": float(equity_series.iloc[-1]) if not equity_series.empty else float(initial_cash),
         "total_return": float(equity_series.iloc[-1] / equity_series.iloc[0] - 1.0) if len(equity_series) >= 2 else 0.0,
+        "annualized_return": _annualized_return(equity_series),
         "annualized_sharpe": _annualized_sharpe(daily_returns),
         "max_drawdown": _max_drawdown(equity_series),
         "equity_curve": equity_series.tolist(),
@@ -448,20 +449,21 @@ def build_factor_panel(
 ) -> pd.DataFrame:
     """Build a simple research panel with forward returns for factor analysis."""
     panel = df_factor.copy()
-    if price_col in panel.columns and f"fwd_return_{horizon}d" not in panel.columns:
-        panel = build_forward_returns(
-            panel,
-            horizon=horizon,
-            price_col=price_col,
-            date_col=date_col,
-            symbol_col=symbol_col,
-        )
+    if price_col in panel.columns:
+        for lag in {int(horizon), 1, 3, 5, 10, 20}:
+            if f"fwd_return_{lag}d" not in panel.columns:
+                panel = build_forward_returns(panel, horizon=lag, price_col=price_col, date_col=date_col, symbol_col=symbol_col)
     needed = {date_col, symbol_col, factor_col, f"fwd_return_{horizon}d"}
     missing = sorted(needed - set(panel.columns))
     if missing:
         raise ValueError(f"missing columns: {missing}")
-    panel = panel[[date_col, symbol_col, factor_col, f"fwd_return_{horizon}d"]].copy()
-    panel = panel.dropna()
+    return_cols = [
+        column
+        for column in panel.columns
+        if column.startswith("fwd_return_") and column.endswith("d")
+    ]
+    panel = panel[[date_col, symbol_col, factor_col, *return_cols]].copy()
+    panel = panel.dropna(subset=[date_col, symbol_col, factor_col, f"fwd_return_{horizon}d"])
     return panel
 
 
@@ -642,6 +644,7 @@ def strategy_backtest_node(
         "initial_cash": float(initial_cash),
         "final_equity": float(equity_series.iloc[-1]),
         "total_return": total_return,
+        "annualized_return": _annualized_return(equity_series),
         "annualized_sharpe": _annualized_sharpe(daily_returns),
         "max_drawdown": _max_drawdown(equity_series),
         "win_rate": None,
@@ -759,6 +762,14 @@ def normalize_backtest_result(
         out["annualized_sharpe"] = None
         out["max_drawdown"] = None
     return out
+
+
+def _annualized_return(equity: pd.Series, periods_per_year: int = 252) -> float | None:
+    values = pd.to_numeric(equity, errors="coerce").dropna()
+    if len(values) < 2 or values.iloc[0] <= 0:
+        return None
+    years = (len(values) - 1) / periods_per_year
+    return float((values.iloc[-1] / values.iloc[0]) ** (1 / years) - 1) if years > 0 else None
 
 
 def _demo_factor() -> None:

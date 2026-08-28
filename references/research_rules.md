@@ -1,27 +1,35 @@
-# Local research rules
+# 研究规则
 
-## Default routing
+## Wheel 前置条件
 
-- 因子、IC、IR、分组、衰减分析 -> factor analysis
-- MA / RSI / breakout / momentum / entry-exit -> time-series strategy
-- top N / screening / ranking / universe selection -> cross-sectional strategy
+先安装并导入 Python 3.12 对应的 `tqx_data` wheel，再通过 SDK 访问本地 Parquet。未安装、导入失败或版本不符时，停止取数并返回实际异常。
 
-## Defaults
+## 默认路由
 
-- Factor analysis: use a local HK universe if the universe is missing.
-- Time-series strategy: use one symbol unless the user asks for more.
-- Cross-sectional strategy: use the requested universe; if missing, derive a local HK/US universe from parquet.
-- If dates are missing, use the smallest workable period and say what you assumed.
+- 因子、IC、ICIR、分组收益、衰减 -> 因子分析
+- MA、RSI、突破、动量、开平仓规则 -> 时序策略
+- top N、筛选、排名、股票池选择 -> 截面策略
 
-## Execution order
+## 取数顺序
 
-- Factor analysis: panel -> factor -> forward returns -> `factor_analysis_control(...)`
-- Strategy backtest: code -> `code_control(...)` -> `stock_backtest_control(...)` -> `backtest_result_control(...)`
+1. 确认 Python 3.12 能导入已提供的 `tqx_data` wheel
+2. 从技能根目录加载 `.env`，检查 `PARQUET_ROOT_PATH` 已配置
+3. 港股调用 `tqx_data.get_hk_daily`，美股调用 `tqx_data.get_us_daily`
+4. 调用时传日期、股票池和必要字段；同一任务复用返回的 DataFrame
 
-## Failure order
+不要绕过 `tqx_data` 直接猜测 Parquet 子目录。不要把 `scripts/tests/` 当成默认行情数据源。
 
-1. Environment
-2. Data
-3. Logic
+## 取数原则
 
-Return the exact missing path, column, market, or rule; do not invent results.
+- 先缩小日期，再缩小股票池
+- 先确认市场，再确认字段
+- 先做最小样本验证，再扩大到全量
+- 不要为了验证而全量扫库
+
+## 失败处理
+
+- 字段缺失：先改字段列表
+- 股票池为空：先确认 universe
+- 日期不足：先缩短回测区间
+- 数据为空：打印接口名、参数、行数和必需列；核对 `.env`、路径权限、市场代码和日期后只重试一次
+- 参数未给全：采用可披露的默认值继续运行；只有市场、策略含义无法判断时才询问

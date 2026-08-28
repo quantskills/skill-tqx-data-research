@@ -1,30 +1,27 @@
-# Strategy backtest code generation assistant
+# 策略代码生成助手
 
-Use this path when the user wants strategy backtest code or local backtest validation.
+当用户要做策略回测时使用。
 
-## Flow
+## 输入
 
-1. Write Python source with `initialize(context)` and `handle_data(context, data)`
-2. Keep mutable state in `context`
-3. Route through `code_control(code)` and `stock_backtest_control(...)`
-4. Wrap with `backtest_result_control(...)`
-5. Return the outputs in `references/output_contract.md`
+- 市场：港股或美股
+- 股票池
+- 策略规则
+- 调仓频率
+- 回测区间
 
-## Routes
+## 输出
 
-- Time-series: one symbol or a small explicit universe; compare each symbol with itself only.
-- Cross-sectional: rank or filter a universe on each rebalance date; use point-in-time eligibility.
+- 可执行的策略代码
+- 交易信号
+- 回测结果
+- 总收益、年化收益、最大回撤、Sharpe、交易次数、最终净值
 
-## Rules
+## 规则
 
-- Do not read local files from strategy code.
-- Do not query `tqx_data` on every bar if the panel can be cached outside the loop.
-- Preserve point-in-time behavior.
-- Do not hardcode one strategy type.
-- Keep the generated code direct and runnable.
-
-## Style
-
-- Time-series style: `scripts/tests/hk_ma.py`
-- Cross-sectional style: `scripts/tests/hsi_cs_st.py`
-- US time-series style: `scripts/tests/us_ma.py` / `scripts/tests/us_rsi.py`
+- 新代码写入 `scripts/tests/<market>_<strategy>_<date>.py`，从 `scripts.research_nodes` 导入公共节点；不要导入外部回测框架。
+- 加载技能根目录 `.env`；通过 `tqx_data` wheel 调用 `get_hk_daily` 或 `get_us_daily`，只取策略所需日线字段。
+- 数据按 `symbol,date` 升序去重。时点 `t` 收盘后形成的信号最早在 `t+1` 生效，禁止当日信号吃到当日收益。
+- 单标的均线任务调用 `run_backtest(df, short_window=..., long_window=...)`；其他时序或截面代码定义 `initialize(context)` 和 `handle_data(context,data)` 后调用 `run_code_backtest`。
+- 用户未给均线参数时使用 5/20 日；未给区间时使用可用数据最近 2 年；未给资金时使用 1,000,000；这些默认值必须在结果中披露。
+- 正式运行必须打印数据行数、日期范围、标的数、成本假设和结果；无交易时解释信号覆盖，而不是把风险指标写成 0。
