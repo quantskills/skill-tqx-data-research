@@ -1,43 +1,34 @@
 ---
 name: skill-tqx-research
-description: Use tqx_data for Hong Kong and US factor analysis and backtest strategy code generation. Use when the task is market-data research, factor construction, IC/IR/group/decay analysis, strategy signals, or local backtest examples.
+description: Use tqx_data with local parquet to generate and run Hong Kong and US factor analysis, time-series strategy backtests, and cross-sectional strategy backtests. Use when the prompt asks for factor construction, IC/IR/group/decay analysis, or strategy code generation and validation.
 ---
 
-Use `tqx_data` SDK (whl) with local parquet as the data source, and the local scripts in `scripts/` as the only implementation surface. Put all executable logic in `scripts/`.
-Before any run, copy `.env.example` to `.env` and set `PARQUET_ROOT_PATH`.
+Use Python 3.12.
 
-If the user asks for 回测5日动量的港股因子分析策略，调仓日为5日，给我返回因子分析结果, treat it as local HK factor analysis and return factor-analysis results directly.
+## Setup
 
-Read these references when needed:
+- Create or activate a Python 3.12 environment.
+- Install dependencies with `python -m pip install -r requirements.txt`.
+- If your environment provides a `tqx_data` wheel, install it before running the skill.
+- Copy `.env.example` to `.env` and set `PARQUET_ROOT_PATH`.
 
+Read only these references when needed:
+
+- `references/research_rules.md`
+- `references/output_contract.md`
 - `references/factor_codegen_assistant.md`
 - `references/strategy_codegen_assistant.md`
-- `references/error_handling.md`
-- `references/research_rules.md`
-- `references/research_node_generation.md`
-- `references/tqx_data_usage.md`
 
-Canonical functions:
+Route by request:
 
-- `run_code_backtest`
-- `load_daily_data`
-- `build_forward_returns`
-- `run_factor_analysis`
-- `run_backtest`
-- `factor_analysis_control`
-- `stock_backtest_control`
-- `backtest_result_control`
-- `factor_analysis_chart_control`
+- Factor analysis: market + factor definition + optional period/group/rebalance/direction
+- Time-series strategy: market + instrument + entry/exit rule + optional settings
+- Cross-sectional strategy: market + universe + filter/rank rule + optional settings
 
-Validation rules:
+Hard rules:
 
-- Prefer small local DataFrame checks before any real data run.
-- Reject empty input, missing required columns, bad date order, duplicate rows, NaN/Inf, and point-in-time leakage.
-- If code or data fails, first classify the failure as environment, data, or logic, then follow `references/error_handling.md`.
-
-Style rules:
-
-- Strategy code should follow `scripts/tests/hk_ma.py`
-- Factor numerator code should follow `scripts/tests/test_factor_anlysis_hk.py`
-- Local HK 5-day momentum validation should follow `scripts/tests/hk_factor_analysis_5d.py`
-- When generating code, separate factor-analysis code generation from strategy-backtest code generation.
+- Use `tqx_data` plus local parquet only.
+- Do not mix factor analysis with strategy backtests.
+- Do not use future data.
+- Do not hardcode one strategy type.
+- If code or data fails, classify environment, data, then logic.
