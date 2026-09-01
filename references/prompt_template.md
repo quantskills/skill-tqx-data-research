@@ -3,7 +3,7 @@
 ## 因子分析
 
 ```text
-参考 `skill-tqx-research`
+参考 `tqx-data-research`
 给我做一版港股或美股因子分析。
 因子定义是：<因子定义>
 前向收益是：<前向收益定义>
@@ -15,7 +15,7 @@
 ## 策略回测
 
 ```text
-参考 `skill-tqx-research`
+参考 `tqx-data-research`
 给我做一版港股或美股策略回测。
 策略规则是：<策略规则>
 股票池是：<股票池>

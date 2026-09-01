@@ -1,5 +1,5 @@
 ---
-name: skill-tqx-research
+name: tqx-data-research
 description: 使用 tqx_data 和本地 parquet 做港股、美股因子分析与策略回测，优先快速取数并输出可执行的研究代码。
 ---
 

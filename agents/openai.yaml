@@ -1,4 +1,4 @@
 interface:
   display_name: "TQX Research"
   short_description: "HK/US factor analysis and strategy backtests with tqx_data and local parquet."
-  default_prompt: "Use $skill-tqx-research to run HK/US factor analysis or strategy backtests from tqx_data and local parquet."
+  default_prompt: "Use $tqx-data-research to run HK/US factor analysis or strategy backtests from tqx_data and local parquet."

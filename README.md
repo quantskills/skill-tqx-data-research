@@ -2,7 +2,7 @@
 
 [English](README.en.md) | 中文
 
-`skill-tqx-research` 使用 `tqx_data` 与本地 Parquet 数据，为港股和美股自动生成并执行因子分析或策略回测代码。它面向研究任务：从用户的一句话需求中确认参数、取数、生成代码、运行分析、校验可信度并返回真实结果。
+`tqx-data-research` 使用 `tqx_data` 与本地 Parquet 数据，为港股和美股自动生成并执行因子分析或策略回测代码。它面向研究任务：从用户的一句话需求中确认参数、取数、生成代码、运行分析、校验可信度并返回真实结果。
 
 ## 能解决什么问题
 
@@ -81,12 +81,12 @@ date, symbol, open, high, low, close, volume
 ## Agent 提示词示例
 
 ```text
-参考 skill-tqx-research，给我做港股 5 日动量因子分析，每 5 个交易日调仓，
+参考 tqx-data-research，给我做港股 5 日动量因子分析，每 5 个交易日调仓，
 使用本地 Parquet，返回 IC、Rank IC、ICIR、五组收益、衰减和可信度结论。
 ```
 
 ```text
-参考 skill-tqx-research，回测 TSLA 的 7/20 日均线金叉死叉策略，
+参考 tqx-data-research，回测 TSLA 的 7/20 日均线金叉死叉策略，
 使用美股日线，给出完整参数、收益指标、交易明细摘要和结果可信度。
 ```
 

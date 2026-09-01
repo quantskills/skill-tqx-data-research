@@ -2,7 +2,7 @@
 
 [中文](README.md) | English
 
-`skill-tqx-research` uses `tqx_data` and local Parquet to generate and execute factor analysis or strategy backtests for Hong Kong and US equities. It turns a research request into code, data retrieval, execution, validation, and a real result.
+`tqx-data-research` uses `tqx_data` and local Parquet to generate and execute factor analysis or strategy backtests for Hong Kong and US equities. It turns a research request into code, data retrieval, execution, validation, and a real result.
 
 ## Capabilities
 
@@ -47,12 +47,12 @@ Factor reports include definition, market/universe, dates, sample size, IC, Rank
 ## Agent examples
 
 ```text
-Use skill-tqx-research to analyze a 5-day HK momentum factor with 5-day rebalancing.
+Use tqx-data-research to analyze a 5-day HK momentum factor with 5-day rebalancing.
 Use local Parquet and return IC, Rank IC, ICIR, quintile returns, decay, and credibility.
 ```
 
 ```text
-Use skill-tqx-research to backtest a TSLA 7/20-day MA crossover on US daily data.
+Use tqx-data-research to backtest a TSLA 7/20-day MA crossover on US daily data.
 Return assumptions, performance metrics, trade summary, and credibility checks.
 ```
 
